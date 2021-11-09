@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mealsapp/models/meal.dart';
 import 'package:mealsapp/screens/categories_screen.dart';
 import 'package:mealsapp/screens/favourties_screen.dart';
+import 'package:mealsapp/widgets/changeThemeButtonWidget.dart';
 import 'package:mealsapp/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -37,6 +38,9 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_pages[_selectedPageIndex]['title']),
+        actions: [
+          ChangeThemeButtonWidget(),
+        ],
       ),
       body: _pages[_selectedPageIndex]['page'],
       drawer: MainDrawer(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealsapp/Themes/theme_provider.dart';
 import 'package:mealsapp/dummy_data.dart';
 import 'package:mealsapp/models/meal.dart';
 import 'package:mealsapp/screens/categories_screen.dart';
@@ -6,6 +7,7 @@ import 'package:mealsapp/screens/category_meals_screen.dart';
 import 'package:mealsapp/screens/filter_screen.dart';
 import 'package:mealsapp/screens/meal_detail_screen.dart';
 import 'package:mealsapp/screens/tabs_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -70,39 +72,47 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: Colors.pink,
-          accentColor: Colors.amber,
-          canvasColor: Color.fromRGBO(255, 254, 229, 1),
-          fontFamily: 'Raleway',
-          textTheme: ThemeData.light().textTheme.copyWith(
-              body1: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              body2: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              title: TextStyle(
-                  fontFamily: 'RobotoCondensed',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold))),
-      // home: CategoriesScreen(),
-      initialRoute: '/',
-      routes: {
-        '/': (ctx) => TabsScreen(_favouriteMeals),
-        CategoryMealsScreen.routeName: (ctx) =>
-            CategoryMealsScreen(_availableMeals),
-        MealDetailScreen.routeName: (ctx) =>
-            MealDetailScreen(_toggleFavourites,_isMealFavourite),
-        FiltersScreen.RouteName: (ctx) => FiltersScreen(_filters, _setFilters),
-      },
-      onUnknownRoute: (settings) {
-        return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
-      },
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ThemeProvider(),
+        builder: (context, _) {
+          final themeProvider = Provider.of<ThemeProvider>(context);
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            themeMode: themeProvider.themeMode,
+            darkTheme: MyThemes.darkTheme,
+            theme: ThemeData(
+                primarySwatch: Colors.pink,
+                accentColor: Colors.amber,
+                canvasColor: Color.fromRGBO(255, 254, 229, 1),
+                fontFamily: 'Raleway',
+                textTheme: ThemeData.light().textTheme.copyWith(
+                    body1: TextStyle(
+                      color: Color.fromRGBO(20, 51, 51, 1),
+                    ),
+                    body2: TextStyle(
+                      color: Color.fromRGBO(20, 51, 51, 1),
+                    ),
+                    title: TextStyle(
+                        fontFamily: 'RobotoCondensed',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold))),
+            // home: CategoriesScreen(),
+            initialRoute: '/',
+            routes: {
+              '/': (ctx) => TabsScreen(_favouriteMeals),
+              CategoryMealsScreen.routeName: (ctx) =>
+                  CategoryMealsScreen(_availableMeals),
+              MealDetailScreen.routeName: (ctx) =>
+                  MealDetailScreen(_toggleFavourites, _isMealFavourite),
+              FiltersScreen.RouteName: (ctx) =>
+                  FiltersScreen(_filters, _setFilters),
+            },
+            onUnknownRoute: (settings) {
+              return MaterialPageRoute(builder: (ctx) => CategoriesScreen());
+            },
+          );
+        });
   }
 }
 
